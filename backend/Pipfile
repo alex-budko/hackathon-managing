@@ -9,6 +9,9 @@ django = "*"
 djangorestframework = "*"
 timedelta = "*"
 django-cors-headers = "*"
+python-dotenv = "*"
+djangorestframework-simplejwt = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

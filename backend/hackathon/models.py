@@ -1,49 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser
+    AbstractBaseUser
 )
 
-# Manager for creating users
-class UserManager(BaseUserManager):
-    def create(self, username, email, password=None):
-        if not email:
-            raise ValueError('Users must have an email address')
-
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-
-        return user
-
-    def create_user(self, username, email, password=None):
-        if not email:
-            raise ValueError('Users must have an email address')
-
-        user = self.model(
-            email=self.normalize_email(email),
-            username=username,
-        )
-
-        user.set_password(password)
-        user.save(using=self._db)
-
-        return user
-
-    def create_superuser(self, email, username, password=None):
-        user = self.create_user(
-            email,
-            password=password,
-            username=username,
-        )
-        user.is_admin = True
-        user.save(using=self._db)
-
-        return user
-
+from .managers import UserManager
 
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -54,13 +14,7 @@ class User(AbstractBaseUser):
 
     username = models.CharField(
         max_length=265, primary_key=True, unique=True, blank=False)
-
-    money = models.FloatField(default=500000.0)
-
-    stocks = models.JSONField(default=dict({}))
-
-    shorted_stocks = models.JSONField(default=dict({}))
-
+    
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
